@@ -1,51 +1,43 @@
-// server.js
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const asyncRoutes = require("./routes/asyncRoutes");
-const authRoutes = require("./routes/authRoutes");
-const { sequelize } = require("./models");
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const { Server } = require('socket.io');
+const asyncRoutes = require('./routes/asyncRoutes');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+
+// Middleware para permitir CORS (frontend)
+app.use(cors({
+  origin: '*', // cambiar si lo deseas a origen específico
+  methods: ['GET', 'POST']
+}));
 
 // Middleware para parsear JSON
 app.use(express.json());
 
-//crear modelos en base de datos
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Conectado a la base de datos");
+// API REST
+app.use('/api', asyncRoutes);
 
-    await sequelize.sync({ alter: true });
-    console.log("Modelos sincronizados");
-  } catch (error) {
-    console.error("Error:", error);
+// Socket.IO con CORS habilitado
+const io = new Server(server, {
+  cors: {
+    origin: '*', // cambiar por origen específico si es necesario
+    methods: ['GET', 'POST']
   }
-})();
-
-// Middleware para rutas
-app.use("/api", asyncRoutes);
-app.use("/auth", authRoutes);
+});
 
 // Conexión WebSocket
-io.on("connection", (socket) => {
-  console.log("Nuevo cliente conectado:", socket.id);
+io.on('connection', (socket) => {
+  console.log('Nuevo cliente conectado:', socket.id);
 
-  // Escuchar evento personalizado
-  socket.on("mensaje", (data) => {
-    console.log("Mensaje recibido:", data);
-    // Enviar respuesta al cliente
-    socket.emit("respuesta", {
-      text: "Mensaje recibido en el servidor",
-      recibido: true,
-    });
+  socket.on('mensaje', (data) => {
+    console.log('Mensaje recibido:', data);
+    socket.emit('respuesta', { text: 'Mensaje recibido en el servidor', recibido: true });
   });
 
-  socket.on("disconnect", () => {
-    console.log("Cliente desconectado:", socket.id);
+  socket.on('disconnect', () => {
+    console.log('Cliente desconectado:', socket.id);
   });
 });
 
