@@ -1,0 +1,160 @@
+/* Estilos para el componente SensorList de SensorApp */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+
+/* Variables para colores */
+:root {
+  --primary-color: #5EA34F; /* Verde vibrante para acentos */
+  --secondary-color: #3A986A; /* Verde azulado para texto */
+  --background-color: #E6FFB1; /* Verde claro para fondos */
+  --accent-color: #37B477; /* Verde intermedio para bordes */
+  --dark-color: #286643; /* Verde oscuro para hover */
+  --status-active: #5EA34F; /* Verde para estado activo */
+  --status-inactive: #dc2626; /* Rojo para estado inactivo */
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(94, 163, 79, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(94, 163, 79, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(94, 163, 79, 0);
+  }
+}
+
+/* Cuadrícula de sensores */
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--background-color);
+  border-radius: 0.75rem;
+  font-family: 'Roboto', sans-serif;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Tarjeta de sensor */
+.sensor-card {
+  background-color: white;
+  border: 2px solid var(--accent-color);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(40, 102, 67, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.7s ease-out;
+}
+
+.sensor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(40, 102, 67, 0.15);
+}
+
+/* Título de la tarjeta */
+.sensor-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 0.5rem;
+}
+
+/* Texto de la tarjeta */
+.sensor-card p {
+  font-size: 1rem;
+  color: var(--secondary-color);
+  margin-bottom: 0.5rem;
+}
+
+/* Indicador de estado */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.status-indicator.active {
+  background-color: var(--status-active);
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.inactive {
+  background-color: var(--status-inactive);
+  color: white;
+}
+
+.status-indicator:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .sensor-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .sensor-card {
+    padding: 1rem;
+  }
+
+  .sensor-card h3 {
+    font-size: 1.125rem;
+  }
+
+  .sensor-card p {
+    font-size: 0.875rem;
+  }
+
+  .status-indicator {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sensor-grid {
+    padding: 0.75rem;
+  }
+
+  .sensor-card {
+    padding: 0.75rem;
+  }
+
+  .sensor-card h3 {
+    font-size: 1rem;
+  }
+
+  .sensor-card p {
+    font-size: 0.75rem;
+  }
+
+  .status-indicator {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.675rem;
+  }
+}

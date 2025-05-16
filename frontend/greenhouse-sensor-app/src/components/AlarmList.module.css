@@ -1,0 +1,79 @@
+
+/* Estilos para la lista de alarmas de SensorApp */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap');
+
+/* Variables para colores */
+:root {
+  --primary-color: #5EA34F; /* Verde vibrante para acentos */
+  --secondary-color: #3A986A; /* Verde azulado para texto */
+  --background-color: #E6FFB1; /* Verde claro para fondos */
+  --accent-color: #37B477; /* Verde intermedio para bordes */
+  --dark-color: #286643; /* Verde oscuro para detalles */
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Lista de alarmas */
+.alarms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--background-color);
+  border-radius: 0.75rem;
+  font-family: 'Roboto', sans-serif;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--secondary-color);
+  background-color: white;
+  border: 2px solid var(--accent-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(40, 102, 67, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.empty-state:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 102, 67, 0.15);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .alarms-list {
+    padding: 0.75rem;
+  }
+
+  .empty-state {
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .alarms-list {
+    padding: 0.5rem;
+  }
+
+  .empty-state {
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+}
