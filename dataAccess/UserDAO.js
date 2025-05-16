@@ -16,13 +16,13 @@ class UserDAO {
 
       const contraseñaValida = await bcrypt.compare(
         contraseña,
-        usuario.password 
+        usuario.password
       );
       if (!contraseñaValida) {
         throw new Error("Usuario o contraseña incorrectos");
       }
 
-      return usuario;
+      return usuario.get({ plain: true });
     } catch (error) {
       console.error("Error en autenticación:", error.message);
       throw error;
