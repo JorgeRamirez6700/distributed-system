@@ -1,6 +1,7 @@
 // routes/asyncRoutes.js
 const express = require('express');
 const router = express.Router();
+const { login, crearUsuario } = require('../controllers/UserController')
 
 // Simulación de procesamiento pesado asíncrono
 router.get('/long-task', async (req, res) => {
@@ -12,5 +13,8 @@ router.get('/long-task', async (req, res) => {
   console.log("Fin del proceso largo");
   res.json({ message: "Proceso largo completado exitosamente" });
 });
+
+router.post('/login', login);
+router.post('/crearUsuario', crearUsuario);
 
 module.exports = router;
