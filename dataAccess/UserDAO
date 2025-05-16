@@ -1,0 +1,55 @@
+const { Usuario } = require("../models");
+const bcrypt = require("bcryptjs");
+
+class UserDAO {
+  constructor() {}
+
+  //Autenticacion
+  async autenticarUsuario(correo, contraseña) {
+    try {
+      const usuario = await Usuario.findOne({ where: { correo } });
+
+      console.log("Usuario encontrado:", usuario);
+
+      if (!usuario) {
+        throw new Error("Usuario o contraseña incorrectos");
+      }
+
+      const contraseñaValida = await bcrypt.compare(
+        contraseña,
+        usuario.dataValues["contraseña"]
+      );
+      if (!contraseñaValida) {
+        throw new Error("Usuario o contraseña incorrectos");
+      }
+
+      return usuario;
+    } catch (error) {
+      console.error("Error en autenticación:", error.message);
+      throw error;
+    }
+  }
+
+  //Crear Usuarios
+  async crearUsuario(user, password, type) {
+    try {
+      const usuario = await Usuario.create({ user, password, type });
+      return usuario;
+    } catch (error) {
+      console.error("Error en crearUsuario:", error);
+      throw error;
+    }
+  }
+
+  //Obtener Usuarios
+  async obtenerUsuarios() {
+    try {
+      const usuarios = await Usuario.findAll();
+      return usuarios;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+
+module.exports = new UserDAO();
