@@ -10,10 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
-    "greenhouse-sensor-app": "file:",
->>>>>>> f8ff6ae0cc800535e34350d21d14dd9f601d3597
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

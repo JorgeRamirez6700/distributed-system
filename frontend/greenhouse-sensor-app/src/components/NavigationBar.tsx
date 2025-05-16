@@ -11,8 +11,12 @@ const NavigationBar = () => {
             <Link to="/home">Home</Link>
           </li>
           <li>
+           <Link to="/register">Register User</Link>
+          </li>
+          <li>
             <Link to="/login">Login</Link>
           </li>
+          
           <li>
             <Link to="/register-sensor">Register sensor</Link>
           </li>
@@ -25,6 +29,8 @@ const NavigationBar = () => {
           <li>
             <Link to="/sensor-data">Sensor Data</Link>
           </li>
+          
+         
         </ul>
       </div>
     </nav>
