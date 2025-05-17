@@ -29,6 +29,8 @@ app.use(express.json());
 // Middleware para rutas
 app.use("/api", asyncRoutes);
 app.use("/auth", authRoutes);
+app.use("/sensores", require("./routes/sensores"));
+
 
 // Conexión WebSocket
 io.on("connection", (socket) => {
