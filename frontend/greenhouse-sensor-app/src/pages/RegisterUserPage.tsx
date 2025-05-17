@@ -1,28 +1,35 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TextInput from '../components/TextInput';
+import apiClient from '../api/apiClient';
 
 const RegisterUserPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [type, setType] = useState('user');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && password) {
-      alert(`Registered User(Simulado):\nEmail: ${email}`);
-    
-      setEmail('');
-      setPassword('');
-    } else {
-      alert('Please fill in all fields');
+    setError('');
+    setLoading(true);
+
+    try {
+      await apiClient.post('/auth/register', { user: email, password, type });
+      alert('Usuario registrado exitosamente');
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al registrar usuario');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div style={{ maxWidth: 400, margin: '2rem auto', padding: '1rem', border: '1px solid #ccc', borderRadius: 8 }}>
       <h2>Register a new user</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="email" style={{ display: 'block', marginBottom: 6 }}>
           Email:
@@ -48,8 +55,21 @@ const RegisterUserPage = () => {
           required
         />
 
-        <button type="submit" style={{ padding: '8px 16px' }}>
-          Sign Up
+        <label htmlFor="type" style={{ display: 'block', marginBottom: 6 }}>
+          Type:
+        </label>
+        <select
+          id="type"
+          value={type}
+          onChange={e => setType(e.target.value)}
+          style={{ width: '100%', padding: 8, marginBottom: 12 }}
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit" style={{ padding: '8px 16px' }} disabled={loading}>
+          {loading ? 'Cargando...' : 'Sign Up'}
         </button>
       </form>
     </div>

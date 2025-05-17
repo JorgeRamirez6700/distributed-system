@@ -1,20 +1,29 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TextInput from '../components/TextInput';
+import apiClient from '../api/apiClient';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && password) {
-      console.log('Login attempt:', { email, password });
-      alert('Inicio de sesión exitoso (simulado)');
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await apiClient.post('/auth/login', { user: email, password });
+      const { token, data } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(data));
       navigate('/');
-    } else {
-      alert('Por favor, completa todos los campos');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error en el inicio de sesión');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -22,6 +31,7 @@ const LoginPage = () => {
     <div className="page-container">
       <div className="container">
         <h1>Login</h1>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
             <label
@@ -53,15 +63,18 @@ const LoginPage = () => {
             >
               Password
             </label>
-            <TextInput 
-              value={password} 
-              onChange={setPassword}
+            <input 
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              id='password'
               placeholder='Password'
             />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Cargando...' : 'Login'}
+          </button>
         </form>
       </div>
     </div>

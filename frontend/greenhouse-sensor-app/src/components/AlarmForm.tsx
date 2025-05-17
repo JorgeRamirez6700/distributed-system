@@ -1,44 +1,51 @@
-import Select from './Select';
-import NumberInput from './NumberInput';
-import Button from './Button';
-import Label from './Label';
-import styles from './AlarmForm.module.css';
+import type { ChangeEvent } from 'react';
+import styles from '../pages/AlarmsPage.module.css';
 
 interface AlarmFormProps {
-  newAlarm: { type: string; threshold: number };
-  onChange: (alarm: { type: string; threshold: number }) => void;
+  newAlarm: { type: string; threshold: number; sensorId: string };
+  onChange: (newAlarm: { type: string; threshold: number; sensorId: string }) => void;
   onAdd: () => void;
+  sensors: any[];
 }
 
-const AlarmForm = ({ newAlarm, onChange, onAdd }: AlarmFormProps) => {
-  const options = [
-    { value: 'temperature', label: 'Temperature' },
-    { value: 'humidity', label: 'Humidity' },
-  ];
+const AlarmForm = ({ newAlarm, onChange, onAdd, sensors }: AlarmFormProps) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    onChange({ ...newAlarm, [name]: name === 'threshold' ? parseFloat(value) : value });
+  };
 
   return (
-    <div className={styles.alarmForm}>
+    <div className={styles.form}>
       <div className={styles.field}>
-        <Label htmlFor="alarm-type">Alarm Type</Label>
-        <Select
-          value={newAlarm.type}
-          onChange={(value) => onChange({ ...newAlarm, type: value })}
-          options={options}
-          id="alarm-type"
-        />
+        <label htmlFor="type">Type</label>
+        <select id="type" name="type" value={newAlarm.type} onChange={handleInputChange}>
+          <option value="temperature">Temperature</option>
+          <option value="humidity">Humidity</option>
+          <option value="light">Light</option>
+        </select>
       </div>
       <div className={styles.field}>
-        <Label htmlFor="alarm-threshold">Umbral</Label>
-        <NumberInput
+        <label htmlFor="sensorId">Sensor</label>
+        <select id="sensorId" name="sensorId" value={newAlarm.sensorId} onChange={handleInputChange}>
+          <option value="">Select a sensor</option>
+          {sensors.map(sensor => (
+            <option key={sensor.id} value={sensor.id}>{sensor.name}</option>
+          ))}
+        </select>
+      </div>
+      <div className={styles.field}>
+        <label htmlFor="threshold">Threshold</label>
+        <input
+          type="number"
+          id="threshold"
+          name="threshold"
           value={newAlarm.threshold}
-          onChange={(value) => onChange({ ...newAlarm, threshold: value })}
-          id="alarm-threshold"
-          placeholder="Umbral"
+          onChange={handleInputChange}
+          step="0.1"
+          required
         />
       </div>
-      <div className={styles.buttonContainer}>
-        <Button onClick={onAdd}>Add Alarm</Button>
-      </div>
+      <button type="button" onClick={onAdd}>Add Alarm</button>
     </div>
   );
 };
