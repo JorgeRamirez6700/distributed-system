@@ -60,17 +60,13 @@ class ReportController {
     try {
       const { type } = req.params;
       const reports = await ReportDAO.getReportsByType(type);
-      if (!reports.length) {
-        return next(new Error("No reports found for this type", 404));
-      }
-
       res.status(200).json({
         status: "success",
-        data: reports,
+        data: reports, // Return empty array if no reports
       });
     } catch (error) {
-      console.error("Error fetching reports:", error);
-      next(new Error("Error fetching reports", 500));
+      console.error("Error fetching reports by type:", error);
+      res.status(500).json({ message: "Error fetching reports" });
     }
   }
 }

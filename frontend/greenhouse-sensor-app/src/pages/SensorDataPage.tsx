@@ -5,7 +5,7 @@ import apiClient from '../api/apiClient';
 
 const SensorDataPage = () => {
   const [realTimeData, setRealTimeData] = useState<Array<{ timestamp: string; value: number }>>([]);
-  const [sensors, setSensors] = useState([]);
+  const [sensors, setSensors] = useState<Array<{ id: string | number; name: string }>>([]);
   const [selectedSensor, setSelectedSensor] = useState('');
 
   useEffect(() => {

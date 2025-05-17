@@ -24,17 +24,13 @@ class AlarmController {
   static async getAllAlarms(req, res, next) {
     try {
       const alarms = await AlarmDAO.getAllAlarms();
-      if (!alarms.length) {
-        return next(new Error("No alarms found", 404));
-      }
-
       res.status(200).json({
         status: "success",
-        data: alarms,
+        data: alarms, // Return empty array if no alarms
       });
     } catch (error) {
       console.error("Error fetching alarms:", error);
-      next(new Error("Error fetching alarms", 500));
+      res.status(500).json({ message: "Error fetching alarms" });
     }
   }
 

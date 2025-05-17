@@ -6,10 +6,17 @@ class SensorController {
       const { name, type, location, status } = req.body;
 
       if (!name || !type || !location) {
-        return next(new Error("Missing required fields: name, type, location", 400));
+        return next(
+          new Error("Missing required fields: name, type, location", 400)
+        );
       }
 
-      const sensor = await SensorDAO.createSensor(name, type, location, status || "active");
+      const sensor = await SensorDAO.createSensor(
+        name,
+        type,
+        location,
+        status || "active"
+      );
 
       res.status(201).json({
         status: "success",
@@ -25,16 +32,15 @@ class SensorController {
     try {
       const sensors = await SensorDAO.getAllSensors();
       if (!sensors.length) {
-        return next(new Error("No sensors found", 404));
+        return res.status(404).json({ message: "No sensors found" });
       }
-
       res.status(200).json({
         status: "success",
         data: sensors,
       });
     } catch (error) {
       console.error("Error fetching sensors:", error);
-      next(new Error("Error fetching sensors", 500));
+      res.status(500).json({ message: "Error fetching sensors" });
     }
   }
 
@@ -49,7 +55,12 @@ class SensorController {
       });
     } catch (error) {
       console.error("Error fetching sensor:", error);
-      next(new Error(error.message, error.message === "Sensor not found" ? 404 : 500));
+      next(
+        new Error(
+          error.message,
+          error.message === "Sensor not found" ? 404 : 500
+        )
+      );
     }
   }
 
@@ -66,7 +77,12 @@ class SensorController {
       });
     } catch (error) {
       console.error("Error updating sensor:", error);
-      next(new Error(error.message, error.message === "Sensor not found" ? 404 : 500));
+      next(
+        new Error(
+          error.message,
+          error.message === "Sensor not found" ? 404 : 500
+        )
+      );
     }
   }
 
@@ -81,7 +97,12 @@ class SensorController {
       });
     } catch (error) {
       console.error("Error deleting sensor:", error);
-      next(new Error(error.message, error.message === "Sensor not found" ? 404 : 500));
+      next(
+        new Error(
+          error.message,
+          error.message === "Sensor not found" ? 404 : 500
+        )
+      );
     }
   }
 }
